@@ -22,3 +22,19 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+#stud{
+  border: 3px solid black;
+}
+
+  
+
+#student-data {
+  display:flex;
+  justify-content: space-evenly;
+
+}
+#table-body{
+  display: flex;
+  justify-content: space-evenly;
+}
