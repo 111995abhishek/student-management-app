@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import axios from 'axios'
 class AddStudent extends Component {
   constructor(props){
     super(props);
@@ -11,10 +12,10 @@ class AddStudent extends Component {
     this.addItems = this.addItems.bind(this)
   }
   addItems(){
-    let skill = this.state.skills.split(',');
-    let final_state = this.state;
-    console.log("Skills is"+this.state.skills);
-    final_state['skills'] = skill;
+    // let skill = this.state.skills.split(',');
+    // let final_state = this.state;
+    // console.log("Skills is"+this.state.skills);
+    // final_state['skills'] = skill;
     if(this.state.firstName !== '' && this.state.lastName !== '' && this.state.skills !== ''){
       console.log(this.state.skills);
       this.props.studentinfo(this.state);
@@ -30,9 +31,9 @@ class AddStudent extends Component {
       <div className="">
         
         <div className='form'>
-        <input type='text' className='fieldset' placeholder='First Name' onChange={(event)=>this.setState({firstName:event.target.value})} />
-        <input type='text' className='fieldset' placeholder='Last Name'onChange={(event)=>this.setState({lastName:event.target.value})} />
-        <input type='text' className='fieldset' placeholder='Skills'onChange={(event)=>this.setState({skills:event.target.value})} /><br></br>
+        <input type='text' className='fieldset' placeholder='First Name' onChange={(event)=>this.setState({firstName:event.target.value})}  value={this.state.firstName}/>
+        <input type='text' className='fieldset' placeholder='Last Name'onChange={(event)=>this.setState({lastName:event.target.value})} value={this.state.lastName} />
+        <input type='text' className='fieldset' placeholder='Skills'onChange={(event)=>this.setState({skills:event.target.value})} value={this.state.skills}/><br></br>
         <button className='btn' onClick={this.addItems}>Submit</button>
         </div >
       </div>
@@ -42,7 +43,7 @@ class AddStudent extends Component {
 class SearchName extends Component{
   render(){
     return(
-      <div>
+      <div className="search input">
          <input type="text"  className='searchbtn' onChange={(event) => this.props.searchinfo(event.target.value)}  placeholder="Search By Name" ></input>
       </div>
     )}
@@ -78,9 +79,15 @@ class App extends Component {
   }
   textshow(char)
   {
-    this.setState({
-      students: [...this.state.students,char]
+    axios.post('http://127.0.0.1:8000/student/list/create/',char)
+    .then(res=>{
+      this.refreshList();
     })
+    
+    
+    // this.setState({
+    //   students: [...this.state.students,char]
+    // })
   }
   sortedfirstname(){
     let sortedfirstName= this.state.students.sort(function(a,b){
@@ -125,6 +132,19 @@ class App extends Component {
     searchname:text
   })
 }
+
+refreshList(){
+  axios.get('http://127.0.0.1:8000/student/list/')
+  
+  .then(res=>{
+    this.setState({
+      students:res.data
+  })})
+}
+componentDidMount(){
+  this.refreshList();
+}
+
   render() {
     return (
       <div className="App">
