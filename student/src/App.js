@@ -11,6 +11,7 @@ class AddStudent extends Component {
     }
     this.addItems = this.addItems.bind(this)
   }
+  
   addItems(){
     // let skill = this.state.skills.split(',');
     // let final_state = this.state;
@@ -76,6 +77,7 @@ class App extends Component {
     this.sortedlastName= this.sortedlastName.bind(this)
     this.searchItem= this.searchItem.bind(this)
     this.sortedskills= this.sortedskills.bind(this)
+    this.deleteList=this.deleteList.bind(this)
   }
   textshow(char)
   {
@@ -144,6 +146,13 @@ refreshList(){
 componentDidMount(){
   this.refreshList();
 }
+deleteList(id){
+  axios.delete('http://127.0.0.1:8000/student/list/delete/'+id.toString()+'/')
+  .then(res=>{
+    this.refreshList();
+  })
+  
+}
 
   render() {
     return (
@@ -153,9 +162,10 @@ componentDidMount(){
         <table className="table_content">
           <thead className="table-row">
           <tr>
-            <th className="table-heading" onClick={this.sorteditems}>Firstname</th>
-            <th className="table-heading">Lastname</th>
-            <th className="table-heading">Skills</th>
+            <th onClick={this.sorteditems}>Firstname</th>
+            <th onclick={this.sorteditems}>Lastname</th>
+            <th onclick={this.sorteditems}>Skills</th>
+            <th>Action</th>
           </tr>
           </thead>
           <tbody>
@@ -174,6 +184,7 @@ componentDidMount(){
                   )
                   }
                   </ul></td>
+                  <td><button onClick={(event)=>this.deleteList(item.id)}>delete</button></td>
               </tr>
           ))}
        </tbody>
